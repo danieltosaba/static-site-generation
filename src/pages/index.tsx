@@ -10,7 +10,7 @@ export interface IndexProps {
 export default function Index({microphones}: IndexProps) {
   return <div>
     {microphones.map(microphone => (
-      <Link key={microphone.id} href="[id]" as={`/${microphone.id}`}>
+      <Link key={microphone.id} href="/microphone/[id]" as={`/microphone/${microphone.id}`}>
         <a>{`${microphone.brand} ${microphone.model}`}</a>
       
       </Link>

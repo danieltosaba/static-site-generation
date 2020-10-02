@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import { Microphone } from "../../../model/Microphone";
 import { openDB } from "../../openDB";
 
@@ -10,8 +11,10 @@ export default function MicrophoneDetails({
   price,
   imageUrl,
 }: MicrophoneDetailsProps) {
+  const router = useRouter();
   return (
     <div>
+      {router.isFallback ? <div>loading....</div> : null}
       <div>{id}</div>
       <div>{brand}</div>
       <div>{model}</div>
@@ -32,15 +35,14 @@ export const getStaticProps: GetStaticProps<MicrophoneDetailsProps> = async (
   };
 };
 
-export const getStaticPaths: GetStaticPaths<{id: string}> = async () => {
-    const db = await openDB();
-    const microphones = await db.all("select id from microphone");
-    const paths = microphones.map(mic => {
-        return { params: {id: mic.id.toString()}}
-    });
-    console.log(paths);
-    return {
-        paths,
-        fallback: false
-    }
-}
+export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
+  const db = await openDB();
+  const microphones = await db.all("select id from microphone");
+  const paths = microphones.map((mic) => {
+    return { params: { id: mic.id.toString() } };
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+};
